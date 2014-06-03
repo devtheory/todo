@@ -1,0 +1,23 @@
+<div class="panel panel-info">
+  <div class="panel-heading">
+    <h3 class="panel-title">Expired or Completed Tasks</h3>
+  </div>
+  <div class="panel-body">
+    <p>The tasks below will be automatically cleared tomorrow. You can also click '<strong>Clear tasks</strong>' below to clear them now.</p>
+  </div>
+  <table class="table">
+    <tr>
+      <th>Task</th>
+      <th>Status</th>
+    </tr>
+    <%inactive_tasks.each do |task| %>
+      <tr>        
+        <td><%= task.description %></td>
+        <td><%= task.completed? %></td>
+      </tr>
+    <% end %>
+  </table>
+  <div class="panel-footer">
+    <%= link_to "Clear tasks", task_clear_path(inactive_tasks), class: 'btn btn-success', method: :put %>
+  </div>
+</div>

@@ -4,6 +4,7 @@ Todo::Application.routes.draw do
   resources :tasks
   resources :tasks do
     put :complete
+    put :clear
   end
 
   get 'about' => 'welcome#about'

@@ -11,7 +11,7 @@ class Task < ActiveRecord::Base
     status
   end
 
-  def remove_inactive
+  def self.remove_inactive
     Task.where("expires_at <= ? OR completed == ?", Time.now, true).destroy_all
   end
 
