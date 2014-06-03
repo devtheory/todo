@@ -4,7 +4,7 @@ class TasksController < ApplicationController
   end
 
   def create
-    @task = Task.new(todo_params)
+    @task = current_user.tasks.build(task_params)
     if @task.save
       redirect_to @task, notice: 'Your new Task was saved'
     else
@@ -24,7 +24,7 @@ class TasksController < ApplicationController
   #private methods
   private
 
-  def todo_params
+  def task_params
     params.require(:task).permit(:description)
   end
 
