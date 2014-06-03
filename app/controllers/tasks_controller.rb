@@ -26,10 +26,13 @@ class TasksController < ApplicationController
   end
 
   def index
-    @tasks = current_user.tasks.where("expires_at >= ? AND completed == ?", Time.now, false)
-    @inactive_tasks = current_user.tasks.where("expires_at <= ? OR completed == ?", Time.now, true)
-    authorize @tasks
-    authorize @inactive_tasks
+    #@tasks = current_user.tasks.where("expires_at >= ? AND completed == ?", Time.now, false)
+    #@inactive_tasks = current_user.tasks.where("expires_at <= ? OR completed == ?", Time.now, true)
+    @tasks = current_user.tasks.where("expires_at >= ?", Time.now).where(completed: false)
+    @inactive_tasks = current_user.tasks.where(completed: true)
+    #returns an array @tasks = current_user.tasks.select {|t| (t.expires_at >= Time.now) && (t.completed == false)}
+    #authorize @tasks
+    #authorize @inactive_tasks
   end
 
   def update
