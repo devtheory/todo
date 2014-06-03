@@ -2,13 +2,15 @@ class TasksController < ApplicationController
 
   def new
     @task = Task.new
+    authorize @task
   end
 
   def create
     @task = current_user.tasks.build(task_params)
-    @task.expires_at = @task.created_at + 1.week
+    @task.expires_at = Time.now + 7.days
+    authorize @task
     if @task.save
-      redirect_to @tasks, notice: 'Your new Task was saved'
+      redirect_to tasks_path, notice: 'Your new Task was saved'
     else
       flash[:error] = "Your Task cannot be blank"
       render :new
@@ -17,10 +19,39 @@ class TasksController < ApplicationController
 
   def show
     @task = Task.find(params[:id])
+    authorize @task
   end
 
   def index
-    @tasks = Task.all
+    @tasks = current_user.tasks.where("expires_at >= ? AND completed == ?", Time.now, false)
+    @inactive_tasks = current_user.tasks.where("expires_at <= ? OR completed == ?", Time.now, true)
+    authorize @tasks
+    authorize @inactive_tasks
+  end
+
+  def update
+  end
+
+  def destroy
+    @task = current_user.tasks.find(params[:id])
+
+    if @task.destroy
+      redirect_to tasks_path, notice: "Task was sucessfully deleted"
+    else
+      flash[:error] = "There was an error deleting your task"
+      redirect_to @tasks
+    end
+  end
+
+  def complete
+    @task = current_user.tasks.find(params[:task_id])
+    @task.completed = true
+    if @task.save
+      redirect_to tasks_path, notice: "Task completed!"
+    else
+      flash[:error] = "Task failed to complete"
+      redirect_to tasks_path
+    end
   end
 
   #private methods
