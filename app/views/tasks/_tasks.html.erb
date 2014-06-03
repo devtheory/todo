@@ -1,0 +1,39 @@
+<div class="panel panel-primary">
+  
+  <div class="panel-heading">
+    <h3 class="panel-title"><%= current_user.name + "'s active tasks"%></h3>
+  </div>
+  
+  <div class="panel-body">
+    <p>Your pending tasks are below. Tasks expire automatically if not completed within <strong>7</strong> days!</p> 
+  </div>
+  
+  <table class="table">
+    <tr>
+      <th class="col-md-1">Action</th>
+      <th>Task</th>
+      <th>Expiration</th>
+    </tr>
+    
+    <%tasks.each do |task| %>
+    
+    <tr>
+      <td>
+        <%= link_to task, method: :delete do %>
+          <button type="button" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span></button>
+        <% end %>
+        <%= link_to task_complete_path(task), method: :put do %>
+          <button type="button" class="btn btn-success btn-xs"><span class="glyphicon glyphicon-check"></span></button>
+        <% end %>
+      </td>
+      <td><%= task.description %></td>
+      <td>Expires in <%= distance_of_time_in_words_to_now(task.expires_at) %></td>
+    </tr>
+    
+    <% end %>
+  </table>
+  
+  <div class="panel-footer">
+    <%= link_to "Add task", new_task_path, class: 'btn btn-primary', id:"new-task"%>
+  </div>
+</div>

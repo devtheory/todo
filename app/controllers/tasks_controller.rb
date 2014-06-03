@@ -1,5 +1,5 @@
 class TasksController < ApplicationController
-
+  respond_to :html, :js
   def new
     @task = Task.new
     authorize @task
@@ -10,10 +10,13 @@ class TasksController < ApplicationController
     @task.expires_at = Time.now + 7.days
     authorize @task
     if @task.save
-      redirect_to tasks_path, notice: 'Your new Task was saved'
+      flash[:notice] = 'Your new Task was saved'
     else
       flash[:error] = "Your Task cannot be blank"
-      render :new
+    end
+
+    respond_with(@task) do |f|
+      f.html { redirect_to tasks_path}
     end
   end
 
@@ -52,6 +55,11 @@ class TasksController < ApplicationController
       flash[:error] = "Task failed to complete"
       redirect_to tasks_path
     end
+  end
+
+  def clear
+    @task = current_user.tasks.remove_inactive
+    redirect_to tasks_path, notice: "Inactive tasks removed successfully"
   end
 
   #private methods
