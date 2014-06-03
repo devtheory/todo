@@ -7,10 +7,60 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-<%= flash[:notice] if flash[:notice] %><br />
-<%= flash[:error] if flash[:error] %><br />
+  <div class="container">
+    <nav class="navbar navbar-default" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Todo</a>
+        </div>
 
-<%= yield %>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <% if current_user %>
+              <li class="active"><%= link_to "Edit #{current_user.name}", edit_user_registration_path %> </li>
+              <li class="active"><%= link_to "Log out", destroy_user_session_path, method: :delete %></li>
+            <% else %>
+              <li class="active"><%= link_to "Sign In", new_user_session_path %> </li>
+              <li class="active"><%= link_to "Sign Up", new_user_registration_path %> </li>
+            <% end %>
+              <% if flash[:notice] %>
+                <li class="alert-success active" id="flash">
+                  <%= flash[:notice] %>
+                </li>
+              <% end %>
+              <% if flash[:error] %>
+                <li class="alert-danger active" id="flash">
+                  <%= flash[:error] %>
+                </li>
+              <% end %>
+              <% if flash[:alert] %>
+                <li class="alert-warning active" id="flash">
+                  <%= flash[:alert] %>
+                </li>
+              <% end %>
+          </ul>
+
+       </div>
+      </nav>
+    </nav>
+
+    <%= yield %>
+
+  </div>
+
+  <script type="text/javascript">
+  $(document).ready(function(){
+    setTimeout(function(){
+    $('#flash').remove();
+    }, 5000);
+  })
+</script>
 
 </body>
 </html>

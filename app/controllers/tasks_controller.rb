@@ -1,12 +1,14 @@
 class TasksController < ApplicationController
+
   def new
     @task = Task.new
   end
 
   def create
     @task = current_user.tasks.build(task_params)
+    @task.expires_at = @task.created_at + 1.week
     if @task.save
-      redirect_to @task, notice: 'Your new Task was saved'
+      redirect_to @tasks, notice: 'Your new Task was saved'
     else
       flash[:error] = "Your Task cannot be blank"
       render :new
