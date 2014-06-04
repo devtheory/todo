@@ -1,3 +1,3 @@
 every 2.minutes do
-  runner "Task.remove_inactive"
+  rake "clear_tasks"
 end
