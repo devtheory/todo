@@ -1,7 +1,6 @@
 Todo::Application.routes.draw do
 
   devise_for :users
-  resources :tasks
   resources :tasks do
     put :complete
     put :clear
