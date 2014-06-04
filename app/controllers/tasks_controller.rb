@@ -31,8 +31,8 @@ class TasksController < ApplicationController
     @tasks = current_user.tasks.where("expires_at >= ?", Time.now).where(completed: false)
     ######@inactive_tasks = current_user.tasks.where(completed: true)
     #returns an array @tasks = current_user.tasks.select {|t| (t.expires_at >= Time.now) && (t.completed == false)}
-    #authorize @tasks
-    #authorize @inactive_tasks
+    authorize @tasks
+    authorize @inactive_tasks
   end
 
   def update
